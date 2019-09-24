@@ -19,9 +19,9 @@ namespace Functions
             _tableContext = tableDb ?? throw new ArgumentException();
         }
 
-        [FunctionName("Inbound")]
+        [FunctionName("InboundFunction")]
         public async Task Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
             HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -40,8 +40,7 @@ namespace Functions
             }
             else
             {
-                log.LogInformation("Key: " + newQuote.PartitionKey + ", quote: " + newQuote.Quote + ", number: " +
-                                   newQuote.UserPhoneNumber);
+                log.LogInformation($"Key: {newQuote.PartitionKey}, quote: {newQuote.Quote}  number: {newQuote.UserPhoneNumber}");
             }
         }
     }

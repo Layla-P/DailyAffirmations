@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions", "tests\Functions\Functions.csproj", "{86439DFE-AD5D-43D7-8375-C287F877FB05}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions", "src\Functions\Functions.csproj", "{08B414EA-70D7-450C-88D5-9743DB3D0617}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsTests", "tests\FunctionsTests\FunctionsTests.csproj", "{B65EDB6C-1875-4C6E-ADC0-E2FA46A44871}"

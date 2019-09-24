@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Functions.Models;
 using Microsoft.Azure.Cosmos.Table;
@@ -40,11 +42,11 @@ namespace Functions.TableServices
             
             if (await _table.CreateIfNotExistsAsync())
             {
-                _log.LogInformation("Created Table named: {0}", _tableConfiguration.TableName);
+                _log.LogInformation($"Created Table named: {_tableConfiguration.TableName}");
             }
             else
             {
-                _log.LogInformation("Table {0} already exists", _tableConfiguration.TableName);
+                _log.LogInformation($"Table {_tableConfiguration.TableName} already exists");
             }
 
         }
@@ -71,10 +73,60 @@ namespace Functions.TableServices
                 // Get the request units consumed by the current operation. RequestCharge of a TableResult is only applied to Azure CosmoS DB 
                 if (result.RequestCharge.HasValue)
                 {
-                    _log.LogInformation("Request Charge of InsertOrMerge Operation: " + result.RequestCharge);
+                    _log.LogInformation($"Request Charge of InsertOrMerge Operation:{ result.RequestCharge}");
                 }
 
                 return insertedQuote;
+            }
+            catch (Exception e)
+            {
+                _log.LogInformation(e.Message);
+                throw;
+            }
+        }
+
+        public async Task<TableEntity> GetRandomEntityAsync()
+        {
+            if (_table is null)
+            {
+                _log.LogInformation("The table is not created");
+               throw new ArgumentException();
+            }
+            
+            try
+            {
+                var query = new TableQuery<QuoteEntity>();
+                var quotes = _table.ExecuteQuery(query).ToArray();
+                var random = GetRandom(quotes);
+                var randomQuote = quotes[random];
+                return randomQuote;
+            }
+            catch (Exception e)
+            {
+                _log.LogInformation(e.Message);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<string>> ListNumbersAsync()
+        {
+            if (_table is null)
+            {
+                _log.LogInformation("The table is not created");
+                throw new ArgumentException();
+            }
+            
+            try
+            {
+                var list = new List<string>();
+                var query = new TableQuery<QuoteEntity>();
+                var quotes = _table.ExecuteQuery(query).GroupBy(e=>e.UserPhoneNumber);
+                foreach (var quote in quotes)
+                {
+                    list.Add(quote.Key);
+                }
+
+                return list;
             }
             catch (Exception e)
             {
@@ -106,6 +158,13 @@ namespace Functions.TableServices
 
             _log.LogInformation("Success!");
             return storageAccount;
+        }
+
+        private int GetRandom(IEnumerable<QuoteEntity> quotes)
+        {
+            var count = quotes.Count();
+            Random r = new Random();
+            return r.Next(0, count-1);
         }
     }
 }
