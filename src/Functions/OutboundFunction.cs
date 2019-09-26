@@ -29,7 +29,6 @@ namespace Functions
         {
             //The following link is great for creating an Azure cron
             //https://codehollow.com/2017/02/azure-functions-time-trigger-cron-cheat-sheet/
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.UtcNow}");
             
             TwilioClient.Init(
                 Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID"),

@@ -4,9 +4,7 @@ namespace Functions.Models
 {
         public class QuoteEntity : TableEntity
         {
-            public QuoteEntity()
-            {
-            }
+            public QuoteEntity(){}
 
             public QuoteEntity(string phoneNumber, string quote)
             {
