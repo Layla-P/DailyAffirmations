@@ -2,8 +2,6 @@ using Microsoft.Azure.Cosmos.Table;
 
 namespace Functions.Models
 {
-
-
         public class QuoteEntity : TableEntity
         {
             public QuoteEntity()

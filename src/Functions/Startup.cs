@@ -39,7 +39,6 @@ namespace Functions
                 TableName = Environment.GetEnvironmentVariable("TableStorage-TableName")
             };
 
-
             builder.Services.AddSingleton(tableConfig);
             builder.Services.AddSingleton<ITableDbContext, TableDbContext>();
 

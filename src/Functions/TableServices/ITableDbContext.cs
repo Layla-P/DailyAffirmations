@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Functions.Models;
 using Microsoft.Azure.Cosmos.Table;
 
 namespace Functions.TableServices
@@ -7,9 +8,9 @@ namespace Functions.TableServices
     public interface ITableDbContext
     {
         Task CreateTableAsync();
-        Task<TableEntity> InsertOrMergeEntityAsync(TableEntity entity);
+        Task<QuoteEntity> InsertOrMergeEntityAsync(TableEntity entity);
         
-        Task<TableEntity> GetRandomEntityAsync();
+        Task<QuoteEntity> GetRandomEntityAsync();
         
         Task<IEnumerable<string>> ListNumbersAsync();
     }

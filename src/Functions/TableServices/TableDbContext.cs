@@ -51,7 +51,7 @@ namespace Functions.TableServices
 
         }
         
-        public  async Task<TableEntity> InsertOrMergeEntityAsync(TableEntity entity)
+        public  async Task<QuoteEntity> InsertOrMergeEntityAsync(TableEntity entity)
         {
             if (_table is null)
             {
@@ -68,7 +68,7 @@ namespace Functions.TableServices
 
                 // Execute the operation.
                 TableResult result = await _table.ExecuteAsync(insertOrMergeOperation);
-                QuoteEntity insertedQuote = result.Result as QuoteEntity;
+                var insertedQuote = result.Result as QuoteEntity;
 
                 // Get the request units consumed by the current operation. RequestCharge of a TableResult is only applied to Azure CosmoS DB 
                 if (result.RequestCharge.HasValue)
@@ -85,20 +85,26 @@ namespace Functions.TableServices
             }
         }
 
-        public async Task<TableEntity> GetRandomEntityAsync()
+        public async Task<QuoteEntity> GetRandomEntityAsync()
         {
             if (_table is null)
             {
-                _log.LogInformation("The table is not created");
-               throw new ArgumentException();
+                await CreateTableAsync();
             }
             
             try
             {
-                var query = new TableQuery<QuoteEntity>();
+                var query = new TableQuery<TableEntity>();
                 var quotes = _table.ExecuteQuery(query).ToArray();
+                if (quotes.Length == 0)
+                {
+                    return new QuoteEntity
+                    {
+                        Quote = "You look lovely today, text in and say something nice for your friends!"
+                    };
+                }
                 var random = GetRandom(quotes);
-                var randomQuote = quotes[random];
+                var randomQuote = quotes[random] as QuoteEntity;
                 return randomQuote;
             }
             catch (Exception e)
@@ -112,8 +118,7 @@ namespace Functions.TableServices
         {
             if (_table is null)
             {
-                _log.LogInformation("The table is not created");
-                throw new ArgumentException();
+                await CreateTableAsync();
             }
             
             try
@@ -160,7 +165,7 @@ namespace Functions.TableServices
             return storageAccount;
         }
 
-        private int GetRandom(IEnumerable<QuoteEntity> quotes)
+        private int GetRandom(IEnumerable<TableEntity> quotes)
         {
             var count = quotes.Count();
             Random r = new Random();
