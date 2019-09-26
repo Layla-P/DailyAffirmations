@@ -32,7 +32,8 @@ namespace Functions
 
             builder.Services.AddLogging();
 
-
+            // ------------------ TableStorageDb initialise ------------------
+            
             ITableConfiguration tableConfig = new TableConfiguration
             {
                 ConnectionString = Environment.GetEnvironmentVariable("TableStorage-ConnectionString"),
@@ -42,9 +43,6 @@ namespace Functions
             builder.Services.AddSingleton(tableConfig);
             builder.Services.AddSingleton<ITableDbContext, TableDbContext>();
 
-            // ------------------ TableStorageDb initialise ------------------
-
-            builder.Services.AddSingleton<ITableDbContext, TableDbContext>();
         }
     }
 }

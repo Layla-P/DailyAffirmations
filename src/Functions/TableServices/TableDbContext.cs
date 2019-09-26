@@ -25,119 +25,26 @@ namespace Functions.TableServices
             _tableConfiguration = tableConfiguration;
             
         }
-
         
         public async Task CreateTableAsync()
         {
-            // Retrieve storage account information from connection string.
-            CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString();
-
-            // Create a table client for interacting with the table service
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
-
-            _log.LogInformation("Create a Table for the demo");
-
-            // Create a table client for interacting with the table service 
-            _table = tableClient.GetTableReference(_tableConfiguration.TableName);
-            
-            if (await _table.CreateIfNotExistsAsync())
-            {
-                _log.LogInformation($"Created Table named: {_tableConfiguration.TableName}");
-            }
-            else
-            {
-                _log.LogInformation($"Table {_tableConfiguration.TableName} already exists");
-            }
-
+            throw new NotImplementedException();
         }
         
         public  async Task<QuoteEntity> InsertOrMergeEntityAsync(TableEntity entity)
         {
-            if (_table is null)
-            {
-                await CreateTableAsync();
-            }
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-            try
-            {
-                // Create the InsertOrReplace table operation
-                TableOperation insertOrMergeOperation = TableOperation.InsertOrMerge(entity);
-
-                // Execute the operation.
-                TableResult result = await _table.ExecuteAsync(insertOrMergeOperation);
-                var insertedQuote = result.Result as QuoteEntity;
-
-                // Get the request units consumed by the current operation. RequestCharge of a TableResult is only applied to Azure CosmoS DB 
-                if (result.RequestCharge.HasValue)
-                {
-                    _log.LogInformation($"Request Charge of InsertOrMerge Operation:{ result.RequestCharge}");
-                }
-
-                return insertedQuote;
-            }
-            catch (Exception e)
-            {
-                _log.LogInformation(e.Message);
-                throw;
-            }
+            throw new NotImplementedException();
+           
         }
 
         public async Task<QuoteEntity> GetRandomEntityAsync()
         {
-            if (_table is null)
-            {
-                await CreateTableAsync();
-            }
-            
-            try
-            {
-                var query = new TableQuery<TableEntity>();
-                var quotes = _table.ExecuteQuery(query).ToArray();
-                if (quotes.Length == 0)
-                {
-                    return new QuoteEntity
-                    {
-                        Quote = "You look lovely today, text in and say something nice for your friends!"
-                    };
-                }
-                var random = GetRandom(quotes);
-                var randomQuote = quotes[random] as QuoteEntity;
-                return randomQuote;
-            }
-            catch (Exception e)
-            {
-                _log.LogInformation(e.Message);
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<string>> ListNumbersAsync()
         {
-            if (_table is null)
-            {
-                await CreateTableAsync();
-            }
-            
-            try
-            {
-                var list = new List<string>();
-                var query = new TableQuery<QuoteEntity>();
-                var quotes = _table.ExecuteQuery(query).GroupBy(e=>e.UserPhoneNumber);
-                foreach (var quote in quotes)
-                {
-                    list.Add(quote.Key);
-                }
-
-                return list;
-            }
-            catch (Exception e)
-            {
-                _log.LogInformation(e.Message);
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
         private CloudStorageAccount CreateStorageAccountFromConnectionString()
