@@ -24,7 +24,7 @@ namespace Functions.Models
             var formArray = formQuery.Split('&');
             foreach (var item in formArray)
             {
-                var pair = item.Split("=");
+                var pair = item.Split('=');
                 var key = WebUtility.UrlDecode(pair[0]);
                 var value = WebUtility.UrlDecode(pair[1]);
                 formDictionary.Add(key, value);
