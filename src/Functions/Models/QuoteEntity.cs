@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Azure.Cosmos.Table;
 
 namespace Functions.Models
@@ -11,7 +12,7 @@ namespace Functions.Models
             public QuoteEntity(string phoneNumber, string quote)
             {
                 PartitionKey = "Quotes";
-                RowKey = phoneNumber;
+                RowKey = Guid.NewGuid().ToString();
                 UserPhoneNumber = phoneNumber;
                 Quote = quote;
             }
